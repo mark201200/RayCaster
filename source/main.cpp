@@ -29,36 +29,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cstring>
 #include <cstdio>
 #include "brew_bgr.h"
+#define screenWidth 399
+#define screenHeight 240
+#define texWidth 64
+#define texHeight 64
 #define mapWidth 24
 #define mapHeight 24
 using namespace std;
 
 int worldMap[mapWidth][mapHeight]=
 {
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+  {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,7,7,7,7,7,7,7,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,1},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,8},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,1},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,8},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,1},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,1},
+  {6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,6},
+  {8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4},
+  {6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,6},
+  {4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,3},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {4,4,4,4,4,4,4,4,4,4,1,1,1,2,2,2,2,2,2,3,3,3,3,3}
 };
 
 void gfxDrawSprite(gfxScreen_t screen, gfx3dSide_t side, u8* spriteData, u16 width, u16 height, s16 x, s16 y)
@@ -104,6 +108,12 @@ void setSinglePixel(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 y, u8 red, u
 	fb[3 * (240 - y + (x - 1) * 240) + 2] = red;
 }
 
+void setSinglePixelTest(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 y,u32 color) {
+    u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
+	fb[3 * (240 - y + (x - 1) * 240)] = color;
+}
+
+
 void drawRectangle(gfxScreen_t screen, gfx3dSide_t side, u16 x1, u8 y1, u16 x2, u8 y2, u8 red, u8 green,
 		u8 blue) {
 		     u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
@@ -123,7 +133,7 @@ void clrScreen(gfxScreen_t screen, gfx3dSide_t side) {
 	memset(fb, 0, 240 * 400 * 3);
 }
 
-void levelEditor(gfxScreen_t screen, gfx3dSide_t side){//funge
+void levelEditor(gfxScreen_t screen, gfx3dSide_t side){
     clrScreen(screen,side);
     int i,j;
     bool editing=true;
@@ -246,7 +256,6 @@ while(stayIn){
 
 hidScanInput();
 u32 kDown = hidKeysDown();
-cout<<"not crashed"<<endl;
 if (kDown & KEY_A) stayIn=false;
 if (kDown & KEY_B) {
         stayIn=false;
@@ -254,16 +263,41 @@ if (kDown & KEY_B) {
 }
 }
 }
-
+u32 buffer[screenHeight][screenWidth];
+int drawStart,drawEnd;
+u32 color;
 int main(int /*argc*/, char */*argv*/[])
 {
   gfxInitDefault();
+  PrintConsole bs;
+  consoleInit(GFX_BOTTOM, &bs);
+  consoleSelect(&bs);
   double posX = 22, posY = 12;  //x and y start position
   double dirX = -1, dirY = 0; //initial direction vector
   double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
+  vector<u32> texture[8];
+  for(int i = 0; i < 8; i++) texture[i].resize(texWidth * texHeight);
+  //generate some textures
+  for(int x = 0; x < texWidth; x++)
+  for(int y = 0; y < texHeight; y++)
+  {
+    int xorcolor = (x * 256 / texWidth) ^ (y * 256 / texHeight);
+    //int xcolor = x * 256 / texWidth;
+    int ycolor = y * 256 / texHeight;
+    int xycolor = y * 128 / texHeight + x * 128 / texWidth;
+    texture[0][texWidth * y + x] = 65536 * 254 * (x != y && x != texWidth - y); //flat red texture with black cross
+    texture[1][texWidth * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; //sloped greyscale
+    texture[2][texWidth * y + x] = 256 * xycolor + 65536 * xycolor; //sloped yellow gradient
+    texture[3][texWidth * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; //xor greyscale
+    texture[4][texWidth * y + x] = 256 * xorcolor; //xor green
+    texture[5][texWidth * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
+    texture[6][texWidth * y + x] = 65536 * ycolor; //red gradient
+    texture[7][texWidth * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
+  }
   int w=399;
   int h=240;
   int r,g,b;
+  int x,y;
   bool welcomed=false;
   while(aptMainLoop())
   {
@@ -274,10 +308,10 @@ int main(int /*argc*/, char */*argv*/[])
           welcomed=true;
       }
       if(welcomed) gfxSetDoubleBuffering(GFX_TOP, true);
-      clrScreen(GFX_TOP,GFX_LEFT);
+
     //drawRectangle(GFX_TOP,GFX_LEFT,1,1,399,120,0,127,255);
    // drawRectangle(GFX_TOP,GFX_LEFT,1,120,399,240,101,67,33);
-    for(int x = 1; x < w; x++)
+    for(x = 1; x < w; x++)
     {
       //calculate ray position and direction
       double cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
@@ -352,12 +386,28 @@ int main(int /*argc*/, char */*argv*/[])
       int lineHeight = (int)(h / perpWallDist);
 
       //calculate lowest and highest pixel to fill in current stripe
-      int drawStart = -lineHeight / 2 + h / 2;
+      drawStart = -lineHeight / 2 + h / 2;
       if(drawStart < 0)drawStart = 0;
-      int drawEnd = lineHeight / 2 + h / 2;
+      drawEnd = lineHeight / 2 + h / 2;
       if(drawEnd >= h)drawEnd = h - 1;
 
       //choose wall color
+
+      //texturing calculations
+      int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
+
+      //calculate value of wallX
+      double wallX; //where exactly the wall was hit
+      if (side == 0) wallX = rayPosY + perpWallDist * rayDirY;
+      else           wallX = rayPosX + perpWallDist * rayDirX;
+      wallX -= floor((wallX));
+
+      //x coordinate on the texture
+      int texX = int(wallX * double(texWidth));
+      if(side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
+      if(side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
+
+      /*
        switch(worldMap[mapX][mapY])
       {
        case 1:
@@ -403,11 +453,34 @@ int main(int /*argc*/, char */*argv*/[])
             g=g/2;
             b=b/2;
       }
-      //draw the pixels of the stripe as a vertical line
+      */
+
+      for(y = drawStart; y < drawEnd; y++)
+      {
+        int d = y * 256 - h * 128 + lineHeight * 128;  //256 and 128 factors to avoid floats
+        int texY = ((d * texHeight) / lineHeight) / 256;
+        color = texture[texNum][texHeight * texY + texX];//TODO:FIDDLE WITH THIS, ONLY BLUE TEXs WORK
+        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+        if(side == 1) color = (color >> 1) & 8355711;
+        buffer[y][x] = color;
+        color = color<<0;
+        // cout<<color<<endl;
+        setSinglePixelTest(GFX_TOP,GFX_LEFT,x,y,color);
+      }
       setPixel(GFX_TOP, GFX_LEFT ,x, 1, drawStart, 0,127,255);
       setPixel(GFX_TOP, GFX_LEFT ,x, drawEnd, 239, 101,67,33);
-      setPixel(GFX_TOP, GFX_LEFT ,x, drawStart, drawEnd, r,g,b);
+
     }
+    clrScreen(GFX_TOP,GFX_LEFT);//netti apposto questo e vblank
+
+gspWaitForVBlank();
+
+      //draw the pixels of the stripe as a vertical line
+
+      /*
+      setPixel(GFX_TOP, GFX_LEFT ,x, drawStart, drawEnd, r,g,b);
+      */
+
 
 
 
@@ -453,7 +526,7 @@ u32 held = hidKeysHeld();
       planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
       planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
     }
-    gspWaitForVBlank();
+
     gfxFlushBuffers();
     gfxSwapBuffers();
   }
