@@ -40,28 +40,28 @@ using namespace std;
 int worldMap[mapWidth][mapHeight]=
 {
   {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,7,7,7,7,7,7,7,7},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,1},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,8},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,1},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,8},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,1},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,1},
-  {6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,6},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7},
+  {4,0,0,0,1,2,3,4,5,6,7,8,0,0,0,0,0,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6},
   {8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4},
-  {6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,6},
-  {4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,3},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
-  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,2},
+  {6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+  {4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
   {4,4,4,4,4,4,4,4,4,4,1,1,1,2,2,2,2,2,2,3,3,3,3,3}
 };
 
@@ -103,6 +103,7 @@ void setPixel(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 ys ,u8 yf, u8 red,
 
 void setSinglePixel(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 y, u8 red, u8 green, u8 blue) {
     u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
+
 	fb[3 * (240 - y + (x - 1) * 240)] = blue;
 	fb[3 * (240 - y + (x - 1) * 240) + 1] = green;
 	fb[3 * (240 - y + (x - 1) * 240) + 2] = red;
@@ -110,13 +111,15 @@ void setSinglePixel(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 y, u8 red, u
 
 void setSinglePixelTest(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 y,u32 color) {
     u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
-	fb[3 * (240 - y + (x - 1) * 240)] = color;
+    unsigned char *p = (unsigned char*)&color;
+    fb[3 * (240 - y + (x - 1) * 240)] = p[0];
+	fb[3 * (240 - y + (x - 1) * 240) + 1] = p[1];
+	fb[3 * (240 - y + (x - 1) * 240) + 2] = p[2];
 }
 
 
 void drawRectangle(gfxScreen_t screen, gfx3dSide_t side, u16 x1, u8 y1, u16 x2, u8 y2, u8 red, u8 green,
 		u8 blue) {
-		     u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
 	u16 y;
 	while (x1 <= x2) {
 		y = y1;
@@ -296,7 +299,6 @@ int main(int /*argc*/, char */*argv*/[])
   }
   int w=399;
   int h=240;
-  int r,g,b;
   int x,y;
   bool welcomed=false;
   while(aptMainLoop())
@@ -309,8 +311,9 @@ int main(int /*argc*/, char */*argv*/[])
       }
       if(welcomed) gfxSetDoubleBuffering(GFX_TOP, true);
 
-    //drawRectangle(GFX_TOP,GFX_LEFT,1,1,399,120,0,127,255);
+    //drawRectangle(GFX_TOP,GFX_LEFT,1,1,399,120,327670,127,255);
    // drawRectangle(GFX_TOP,GFX_LEFT,1,120,399,240,101,67,33);
+   clrScreen(GFX_TOP,GFX_LEFT);//netti apposto questo e vblank
     for(x = 1; x < w; x++)
     {
       //calculate ray position and direction
@@ -463,26 +466,13 @@ int main(int /*argc*/, char */*argv*/[])
         //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
         if(side == 1) color = (color >> 1) & 8355711;
         buffer[y][x] = color;
-        color = color<<0;
-        // cout<<color<<endl;
         setSinglePixelTest(GFX_TOP,GFX_LEFT,x,y,color);
       }
       setPixel(GFX_TOP, GFX_LEFT ,x, 1, drawStart, 0,127,255);
       setPixel(GFX_TOP, GFX_LEFT ,x, drawEnd, 239, 101,67,33);
 
+
     }
-    clrScreen(GFX_TOP,GFX_LEFT);//netti apposto questo e vblank
-
-gspWaitForVBlank();
-
-      //draw the pixels of the stripe as a vertical line
-
-      /*
-      setPixel(GFX_TOP, GFX_LEFT ,x, drawStart, drawEnd, r,g,b);
-      */
-
-
-
 
     //speed modifiers
     double moveSpeed = 0.005 * 5.0; //the constant value is in squares/second
@@ -526,7 +516,7 @@ u32 held = hidKeysHeld();
       planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
       planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
     }
-
+gspWaitForVBlank();
     gfxFlushBuffers();
     gfxSwapBuffers();
   }
