@@ -37,6 +37,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define mapHeight 24
 using namespace std;
 
+
+
+
+
+
 int worldMap[mapWidth][mapHeight]=
 {
   {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,7,7,7,7,7,7,7,7},
@@ -70,8 +75,7 @@ void gfxDrawSprite(gfxScreen_t screen, gfx3dSide_t side, u8* spriteData, u16 wid
 	if(!spriteData)return;
 
 	u16 fbWidth, fbHeight;
-	u8* fbAdr=gfxGetFramebuffer(screen, side, &fbWidth, &fbHeight);
-
+    u8* fbAdr=gfxGetFramebuffer(screen, side, &fbWidth, &fbHeight);
 	if(x+width<0 || x>=fbWidth)return;
 	if(y+height<0 || y>=fbHeight)return;
 
@@ -92,8 +96,7 @@ void gfxDrawSprite(gfxScreen_t screen, gfx3dSide_t side, u8* spriteData, u16 wid
 	}
 }
 
-void setPixel(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 ys ,u8 yf, u8 red, u8 green, u8 blue) {
-    u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
+void setPixel(u8* fb, u16 x, u8 ys ,u8 yf, u8 red, u8 green, u8 blue) {
     for(int j=ys;j<yf;j++){
 	fb[3 * (240 - j + (x - 1) * 240)] = blue;
 	fb[3 * (240 - j + (x - 1) * 240) + 1] = green;
@@ -101,43 +104,40 @@ void setPixel(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 ys ,u8 yf, u8 red,
 }
 }
 
-void setSinglePixel(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 y, u8 red, u8 green, u8 blue) {
-    u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
-
+void setSinglePixel(u8* fb, u16 x, u8 y, u8 red, u8 green, u8 blue) {
 	fb[3 * (240 - y + (x - 1) * 240)] = blue;
 	fb[3 * (240 - y + (x - 1) * 240) + 1] = green;
 	fb[3 * (240 - y + (x - 1) * 240) + 2] = red;
 }
 
-void setSinglePixelTest(gfxScreen_t screen, gfx3dSide_t side, u16 x, u8 y,u32 color) {
-    u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
-    unsigned char *p = (unsigned char*)&color;
-    fb[3 * (240 - y + (x - 1) * 240)] = p[0];
-	fb[3 * (240 - y + (x - 1) * 240) + 1] = p[1];
-	fb[3 * (240 - y + (x - 1) * 240) + 2] = p[2];
+void setSinglePixelTest(u8* fb, u16 x, u8 y,u32 color) {
+    unsigned char* RGB = (unsigned char*)&color;
+    fb[3 * (240 - y + (x - 1) * 240)] = RGB[0];
+	fb[3 * (240 - y + (x - 1) * 240) + 1] = RGB[1];
+	fb[3 * (240 - y + (x - 1) * 240) + 2] = RGB[2];
 }
 
 
-void drawRectangle(gfxScreen_t screen, gfx3dSide_t side, u16 x1, u8 y1, u16 x2, u8 y2, u8 red, u8 green,
+void drawRectangle(u8* fb, u16 x1, u8 y1, u16 x2, u8 y2, u8 red, u8 green,
 		u8 blue) {
 	u16 y;
 	while (x1 <= x2) {
 		y = y1;
 		while (y <= y2) {
-			setSinglePixel(screen,side, x1, y, red, green, blue);
+			setSinglePixel(fb, x1, y, red, green, blue);
 			y++;
 		}
 		x1++;
 	}
 }
 
-void clrScreen(gfxScreen_t screen, gfx3dSide_t side) {
-    u8* fb=gfxGetFramebuffer(screen, side, NULL,NULL);
+
+void clrScreen(u8* fb) {
 	memset(fb, 0, 240 * 400 * 3);
 }
 
-void levelEditor(gfxScreen_t screen, gfx3dSide_t side){
-    clrScreen(screen,side);
+void levelEditor(u8* fb){
+    clrScreen(fb);
     int i,j;
     bool editing=true;
 int lastx=10;
@@ -146,26 +146,33 @@ int selectedx=3;
 int selectedy=3;
 cout<<"Welcome to the level editor!\n Use the d-pad to select the block you want to edit."<<endl;
 while(editing){
-        int lastx=10;
+int lastx=10;
 int lasty=10;
-        hidScanInput();
+hidScanInput();
 u32 kDown = hidKeysDown();
-if(kDown & KEY_START) editing=false;
-if(kDown & KEY_DUP) selectedy--;
-if(kDown & KEY_DDOWN) selectedy++;
-if(kDown & KEY_DLEFT) selectedx--;
-if(kDown & KEY_DRIGHT) selectedx++;
-if(selectedy>mapHeight) selectedy=mapHeight;
-if(selectedx>mapWidth) selectedx=mapWidth;
-if(selectedy<0) selectedy=0;
-if(selectedx<0) selectedx=0;
+if(kDown & KEY_START)
+    editing=false;
+if(kDown & KEY_DUP)
+    selectedy--;
+if(kDown & KEY_DDOWN)
+    selectedy++;
+if(kDown & KEY_DLEFT)
+    selectedx--;
+if(kDown & KEY_DRIGHT)
+    selectedx++;
+if(selectedy>mapHeight)
+    selectedy=mapHeight;
+if(selectedx>mapWidth)
+    selectedx=mapWidth;
+if(selectedy<0)
+    selectedy=0;
+if(selectedx<0)
+    selectedx=0;
 if(kDown & KEY_A){
     worldMap[selectedx][selectedy]++;
-    if(worldMap[selectedx][selectedy]>5) worldMap[selectedx][selectedy]=0;
-
+    if(worldMap[selectedx][selectedy]>5)
+        worldMap[selectedx][selectedy]=0;
 }
-
-
 
  for(i=0;i<mapHeight;i++){
 lastx=10;
@@ -174,64 +181,49 @@ lastx=10;
         switch(worldMap[j][i]){
     case 1:
         {
-            drawRectangle(screen,side,lastx,lasty,lastx+6,lasty+6,0,255,0);
+            drawRectangle(fb,lastx,lasty,lastx+6,lasty+6,0,255,0);
             if(i==selectedy&&j==selectedx){
-                //se selezionato
-                drawRectangle(screen,side,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
+                drawRectangle(fb,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
             }
-
             break;
         }
          case 2:
         {
-            drawRectangle(screen,side,lastx,lasty,lastx+6,lasty+6,155,155,155);
+            drawRectangle(fb,lastx,lasty,lastx+6,lasty+6,155,155,155);
             if(i==selectedy&&j==selectedx){
-                //se selezionato
-                drawRectangle(screen,side,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
+                drawRectangle(fb,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
             }
-
             break;
         }
-
          case 3:
         {
-            drawRectangle(screen,side,lastx,lasty,lastx+6,lasty+6,0,0,255);
+            drawRectangle(fb,lastx,lasty,lastx+6,lasty+6,0,0,255);
             if(i==selectedy&&j==selectedx){
-                //se selezionato
-                drawRectangle(screen,side,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
+                drawRectangle(fb,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
             }
-
             break;
         }
-
          case 4:
         {
-            drawRectangle(screen,side,lastx,lasty,lastx+6,lasty+6,255,0,0);
+            drawRectangle(fb,lastx,lasty,lastx+6,lasty+6,255,0,0);
             if(i==selectedy&&j==selectedx){
-                //se selezionato
-                drawRectangle(screen,side,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
+                drawRectangle(fb,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
             }
-
             break;
         }
-
          case 0:
         {
-            drawRectangle(screen,side,lastx,lasty,lastx+6,lasty+6,47,79,79);
+            drawRectangle(fb,lastx,lasty,lastx+6,lasty+6,47,79,79);
             if(i==selectedy&&j==selectedx){
-                //se selezionato
-                drawRectangle(screen,side,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
+                drawRectangle(fb,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
             }
-
             break;
         }
-
          default:
             {
-                drawRectangle(screen,side,lastx,lasty,lastx+6,lasty+6,155,55,240);
+                drawRectangle(fb,lastx,lasty,lastx+6,lasty+6,155,55,240);
                 if(i==selectedy&&j==selectedx){
-             //se selezionato
-             drawRectangle(screen,side,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
+             drawRectangle(fb,lastx+2,lasty+2,lastx+4,lasty+4,0,0,0);
             }
 
             break;
@@ -251,10 +243,42 @@ lasty=lasty+8;
 
 }
 
-void welcomeScreen(gfxScreen_t screen, gfx3dSide_t side){
+void gfxDrawABetterRectangle(gfxScreen_t screen, gfx3dSide_t side, u8 rgbColor[3], s16 x, s16 y, u16 width, u16 height)
+{
+	u16 fbWidth, fbHeight;
+	u8* fbAdr=gfxGetFramebuffer(screen, side, &fbWidth, &fbHeight);
+
+	if(x+width<0 || x>=fbWidth)return;
+	if(y+height<0 || y>=fbHeight)return;
+
+	if(x<0){width+=x; x=0;}
+	if(y<0){height+=y; y=0;}
+	if(x+width>=fbWidth)width=fbWidth-x;
+	if(y+height>=fbHeight)height=fbHeight-y;
+
+	u8 colorLine[width*3];
+
+	int j;
+	for(j=0; j<width; j++)
+	{
+		colorLine[j*3+0]=rgbColor[2];
+		colorLine[j*3+1]=rgbColor[1];
+		colorLine[j*3+2]=rgbColor[0];
+	}
+
+	fbAdr+=fbWidth*3*y;
+	for(j=0; j<height; j++)
+	{
+		memcpy(&fbAdr[x*3], colorLine, width*3);
+		fbAdr+=fbWidth*3;
+	}
+}
+
+
+void welcomeScreen(u8* fb){
     bool stayIn=true;
 
-    gfxDrawSprite(screen,side,(u8*)brew_bgr,240,400,0,0);
+    gfxDrawSprite(GFX_TOP,GFX_LEFT,(u8*)brew_bgr,240,400,0,0);
 while(stayIn){
 
 hidScanInput();
@@ -262,13 +286,14 @@ u32 kDown = hidKeysDown();
 if (kDown & KEY_A) stayIn=false;
 if (kDown & KEY_B) {
         stayIn=false;
-        levelEditor(screen,side);
+        levelEditor(fb);
 }
 }
 }
 u32 buffer[screenHeight][screenWidth];
 int drawStart,drawEnd;
 u32 color;
+unsigned char* colorRGB = (unsigned char*)&color;
 int main(int /*argc*/, char */*argv*/[])
 {
   gfxInitDefault();
@@ -301,19 +326,26 @@ int main(int /*argc*/, char */*argv*/[])
   int h=240;
   int x,y;
   bool welcomed=false;
+  double moveSpeed = 0.005 * 5.0; //the constant value is in squares/second
+    double nsrotSpeed = 0.005 * 3.0; //the constant value is in radians/second
+    double sinrotSpeed = sin(nsrotSpeed);
+    double cosrotSpeed = cos(nsrotSpeed);
+    double negsinrotSpeed = sin(-nsrotSpeed);
+    double negcosrotSpeed = cos(-nsrotSpeed);
   while(aptMainLoop())
   {
-
+      u8* fb=gfxGetFramebuffer(GFX_TOP,GFX_LEFT, NULL,NULL);
       if(!welcomed){
           gfxSetDoubleBuffering(GFX_TOP, false);
-          welcomeScreen(GFX_TOP,GFX_LEFT);
+          welcomeScreen(fb);
           welcomed=true;
       }
       if(welcomed) gfxSetDoubleBuffering(GFX_TOP, true);
+      u8 ceilingrgb[] = {0,127,255};
+      u8 floorrgb[] = {101,67,33};
 
-    //drawRectangle(GFX_TOP,GFX_LEFT,1,1,399,120,327670,127,255);
-   // drawRectangle(GFX_TOP,GFX_LEFT,1,120,399,240,101,67,33);
-   clrScreen(GFX_TOP,GFX_LEFT);//netti apposto questo e vblank
+      gfxDrawABetterRectangle(GFX_TOP,GFX_LEFT,floorrgb,1,1,119,399);//sono al contrario
+     gfxDrawABetterRectangle(GFX_TOP,GFX_LEFT,ceilingrgb,121,1,119,399);
     for(x = 1; x < w; x++)
     {
       //calculate ray position and direction
@@ -331,6 +363,7 @@ int main(int /*argc*/, char */*argv*/[])
       double sideDistY;
 
        //length of ray from one x or y-side to next x or y-side
+     // cout<<rayDirX<<"     "<<rayDirY<<endl;
       double deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
       double deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
       double perpWallDist;
@@ -394,8 +427,6 @@ int main(int /*argc*/, char */*argv*/[])
       drawEnd = lineHeight / 2 + h / 2;
       if(drawEnd >= h)drawEnd = h - 1;
 
-      //choose wall color
-
       //texturing calculations
       int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
 
@@ -410,76 +441,24 @@ int main(int /*argc*/, char */*argv*/[])
       if(side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
       if(side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
 
-      /*
-       switch(worldMap[mapX][mapY])
-      {
-       case 1:
-	{
-		r = 0;
-		g = 255;
-		b = 0;
-		break;
-	}
-	case 2:
-	{
-		r = 155;
-		g = 155;
-		b = 155;
-		break;
-	}
-	case 3:
-	{
-		r = 0;
-		g = 0;
-		b = 255;
-		break;
-	}
-	case 4:
-	{
-		r = 255;
-		g = 0;
-		b = 0;
-		break;
-	}
-	default:
-	{
-		r = 155;
-		g = 55;
-		b = 240;
-		break;
-	}
-      }
-
-      //give x and y sides different brightness
-      if (side == 1) {
-            r=r/2;
-            g=g/2;
-            b=b/2;
-      }
-      */
-
       for(y = drawStart; y < drawEnd; y++)
       {
-        int d = y * 256 - h * 128 + lineHeight * 128;  //256 and 128 factors to avoid floats
+        int d = y * 256 - h * 128 + lineHeight * 128;
         int texY = ((d * texHeight) / lineHeight) / 256;
-        color = texture[texNum][texHeight * texY + texX];//TODO:FIDDLE WITH THIS, ONLY BLUE TEXs WORK
-        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-        if(side == 1) color = (color >> 1) & 8355711;
-        buffer[y][x] = color;
-        setSinglePixelTest(GFX_TOP,GFX_LEFT,x,y,color);
+        color = texture[texNum][texHeight * texY + texX];
+        if(side == 1) texture[texNum][texHeight * texY + texX] = (texture[texNum][texHeight * texY + texX] >> 1) & 8355711;
+        setSinglePixelTest(fb,x,y,color);
       }
-      setPixel(GFX_TOP, GFX_LEFT ,x, 1, drawStart, 0,127,255);
-      setPixel(GFX_TOP, GFX_LEFT ,x, drawEnd, 239, 101,67,33);
 
 
-    }
+
+}
 
     //speed modifiers
-    double moveSpeed = 0.005 * 5.0; //the constant value is in squares/second
-    double rotSpeed = 0.005 * 3.0; //the constant value is in radians/second
+
     hidScanInput();
-u32 kDown = hidKeysDown();
-u32 held = hidKeysHeld();
+    u32 kDown = hidKeysDown();
+    u32 held = hidKeysHeld();
     //move forward if no wall in front of you
     if (kDown & KEY_START)
 			break;
@@ -499,24 +478,24 @@ u32 held = hidKeysHeld();
     {
       //both camera direction and camera plane must be rotated
       double oldDirX = dirX;
-      dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-      dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
+      dirX = dirX * negcosrotSpeed - dirY * negsinrotSpeed;
+      dirY = oldDirX * negsinrotSpeed + dirY * negcosrotSpeed;
       double oldPlaneX = planeX;
-      planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-      planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+      planeX = planeX * negcosrotSpeed - planeY * negsinrotSpeed;
+      planeY = oldPlaneX * negsinrotSpeed + planeY * negcosrotSpeed;
     }
     //rotate to the left
     if (kDown & KEY_DLEFT||held & KEY_DLEFT)
     {
       //both camera direction and camera plane must be rotated
       double oldDirX = dirX;
-      dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
-      dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);
+      dirX = dirX * cosrotSpeed - dirY * sinrotSpeed;
+      dirY = oldDirX * sinrotSpeed + dirY * cosrotSpeed;
       double oldPlaneX = planeX;
-      planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
-      planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
+      planeX = planeX * cosrotSpeed - planeY * sinrotSpeed;
+      planeY = oldPlaneX * sinrotSpeed + planeY * cosrotSpeed;
     }
-gspWaitForVBlank();
+    gspWaitForVBlank();
     gfxFlushBuffers();
     gfxSwapBuffers();
   }
